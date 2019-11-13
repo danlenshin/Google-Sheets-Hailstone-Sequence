@@ -1,1 +1,1 @@
-# Hailstone-Sequence-Data-Table-Google-Sheets-Script-
+# Hailstone Sequence Data-Table Google Sheets Script
