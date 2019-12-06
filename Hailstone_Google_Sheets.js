@@ -15,20 +15,20 @@
  has not been proved, nor has a counterexample been found.
 */
 
-//integer initializations
-var startingNum = 1;
+//integer declarations
+var startingNum;
+var endingNum;
 var cycler;
-var iterations = 0;
-var endingNum = 20000;
+var iterations;
 
-//spreadsheet initializations
+//spreadsheet declarations
 var ss = SpreadsheetApp.getActiveSpreadsheet();
 var sheet = ss.getSheets()[0];
   
-//cell initializations
-var cellX = 2;
-var cellY = 1;
-var cell = sheet.getRange(cellX, cellY);
+//cell declarations
+var cellR = 1;
+var cellC = 1;
+var cell = sheet.getRange(cellR, cellC);
 
 /*
  function HailStoneIterations()
@@ -43,6 +43,12 @@ var cell = sheet.getRange(cellX, cellY);
 */
 function HailstoneIterations()
 {
+  //function specific initializations
+  startingNum = 1;
+  endingNum = 20000;
+  cellR = 2;
+  cellC = 1;
+  
   //while loop to go through hailstone sequence from startingNum to endingNum
   while(endingNum >= startingNum) 
   {
@@ -59,38 +65,68 @@ function HailstoneIterations()
     
     //Sets the values of the leftmost (first) column
     cell.setValue(startingNum);
-    cellY++;
-    cell = sheet.getRange(cellX, cellY);
+    moveCell(0, 1);
     
     //Sets the value of the second column
     cell.setValue(iterations);
-    cellY++;
-    cell = sheet.getRange(cellX, cellY);
+    moveCell(0, 1);
     
     //Sets the value of the third column
     if(chkPrime(startingNum) && startingNum != 1)
     {
       cell.setValue(iterations);
     }
-    cellY++;
-    cell = sheet.getRange(cellX, cellY);
+    moveCell(0, 1);
     
     //Sets the value of the fourth column
     if(((Math.log(startingNum)/Math.log(2)) % 1 === 0) && startingNum != 1)
     {
       cell.setValue(iterations);
     }
-    cellY++;
-    cell = sheet.getRange(cellX, cellY);
+    moveCell(0, 1);
     
     //Returns the cell to the one under the last value set in the first column
-    cellY -=4;
-    cellX++;
-    cell = sheet.getRange(cellX, cellY);
+    moveCell(1, -4);
     
     //redefines startingNum
     startingNum++;
   }
+}
+
+/*
+ function HailstoneRunThru()
+ 
+ This function creates a column of a Hailstone sequence from the starting number until one
+*/
+function HailstoneRunThru()
+{
+  //function specific initializations
+  cellR = 2;
+  cellC = 8;
+  cell = sheet.getRange(cellR, cellC);
+  startingNum = cell.getValue();
+  cycler = startingNum;
+  cell.setValue(startingNum);
+  moveCell(1, 0);
+
+  //clears sheet
+  sheet.getRange('H3:H1000').clearContent();
+  
+  while(cycler != 1)
+  {
+    cycler = cycler % 2 ? 3 * cycler + 1 : cycler/2;
+    
+    cell.setValue(cycler);
+    moveCell(1, 0);
+  }
+}
+
+//function to move cell (to avoid repeated code)
+function moveCell(r, c)
+{
+  cellR += r;
+  cellC += c;
+  cell = sheet.getRange(cellR, cellC);
 }
 
 //function to check whether or not a number is prime
